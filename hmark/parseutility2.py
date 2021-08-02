@@ -103,9 +103,11 @@ def loadSource(rootDirectory):
     srcFileList = []
     for path, dirs, files in walkList:
         for fileName in files:
+            print('file is ', fileName)
             ext = fileName.lower()
             if ext.endswith('.c') or ext.endswith('.cpp') or ext.endswith('.cc') or ext.endswith('.c++') or ext.endswith('.cxx'):
                 absPathWithFileName = path.replace('\\', '/') + '/' + fileName
+                print('AbsPath is ', absPathWithFileName)
                 if maxFileSizeInBytes is not None:
                     if os.path.getsize(absPathWithFileName) < maxFileSizeInBytes:
                         srcFileList.append(absPathWithFileName)
@@ -222,11 +224,11 @@ def parseFile_shallow(srcFileName, caller):
     setEnvironment(caller)
     javaCallCommand += "\"" + srcFileName + "\" 0"
     functionInstanceList = []
-    try:
-        astString = subprocess.check_output(javaCallCommand, stderr=subprocess.STDOUT, shell=True)
-    except subprocess.CalledProcessError as e:
-        print "Parser Error:", e
-        astString = ""
+#     try:
+    astString = subprocess.check_output(javaCallCommand, stderr=subprocess.STDOUT, shell=True)
+#     except subprocess.CalledProcessError as e:
+#         print ( "Parser Error:", e)
+#         astString = ""
     funcList = astString.split(delimiter)
     for func in funcList[1:]:
         functionInstance = function(srcFileName)
@@ -256,7 +258,7 @@ def parseFile_deep(srcFileName, caller):
     try:
         astString = subprocess.check_output(javaCallCommand, stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError as e:
-        print "Parser Error:", e
+        print ("Parser Error:", e)
         astString = ""
 
     funcList = astString.split(delimiter)
